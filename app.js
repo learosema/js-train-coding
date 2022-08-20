@@ -69,6 +69,7 @@ export class Application {
     this.renderTarget.setSize(width * pixelRatio, height * pixelRatio);
     this.setUniforms({
       resolution: new Vector2(width * pixelRatio, height * pixelRatio),
+      buffer: this.renderTarget.texture,
     });
   }
 
