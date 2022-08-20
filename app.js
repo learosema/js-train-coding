@@ -31,9 +31,11 @@ export class Application {
   };
 
   constructor() {
-    this.canvas = $(".world");
-    this.renderer = new WebGLRenderer({ canvas: this.canvas });
-
+    this.renderer = new WebGLRenderer({
+      antialias: true,
+      preserveDrawingBuffer: true,
+    });
+    this.canvas = this.renderer.domElement;
     this.renderer.setPixelRatio(this.pixelRatio);
     this.currentPixelRatio = this.pixelRatio;
     this.renderTarget = this.setupRenderTarget();
@@ -58,15 +60,15 @@ export class Application {
   setupRenderTarget() {
     const { width, height } = this.dimensions;
     const { pixelRatio } = this;
-    return new WebGLRenderTarget(width, height);
+    return new WebGLRenderTarget(width * pixelRatio, height * pixelRatio);
   }
 
   resizeRenderTarget() {
     const { width, height } = this.dimensions;
     const { pixelRatio } = this;
-    this.renderTarget.setSize(width, height);
+    this.renderTarget.setSize(width * pixelRatio, height * pixelRatio);
     this.setUniforms({
-      resolution: new Vector2(width, height),
+      resolution: new Vector2(width * pixelRatio, height * pixelRatio),
       buffer: this.renderTarget.texture,
     });
   }
@@ -87,11 +89,11 @@ export class Application {
       side: THREE.DoubleSide,
       uniforms: {
         time: { value: 0 },
-        buffer: { value: this.renderTarget?.texture },
+        buffer: { value: this.renderTarget.texture },
         resolution: {
           value: new Vector2(
-            this.dimensions.width,
-            this.dimensions.height
+            this.dimensions.width * this.pixelRatio,
+            this.dimensions.height * this.pixelRatio,
           ),
         },
       },
@@ -128,7 +130,6 @@ export class Application {
     const { width, height } = this.dimensions;
     const uniforms = {
       time: clock.getElapsedTime(),
-      resolution: new Vector2(width, height),
     };
     if (this.currentPixelRatio !== pixelRatio) {
       this.currentPixelRatio = pixelRatio;
@@ -137,7 +138,8 @@ export class Application {
     }
     this.setUniforms(uniforms);
     
-    renderer.render(scene, camera);
+    // Don't render anything to screen. The screen should be blank.
+    // renderer.render(scene, camera);
     
     const oldRenderTarget = renderer.getRenderTarget();
     renderer.setRenderTarget(renderTarget);
