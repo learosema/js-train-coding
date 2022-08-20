@@ -35,7 +35,7 @@ export class Application {
       antialias: true,
       preserveDrawingBuffer: true,
     });
-    document.body.apendChild(this.renderer.domElement);
+    document.body.appendChild(this.renderer.domElement);
     this.canvas = this.renderer.domElement;
     this.renderer.setPixelRatio(this.pixelRatio);
     this.currentPixelRatio = this.pixelRatio;
