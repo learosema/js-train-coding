@@ -57,7 +57,7 @@ export class Application {
   setupRenderTarget() {
     const { width, height } = this.dimensions;
     const { pixelRatio } = this;
-    return new WebGLRenderTarget(width * pixelRatio, height * pixelRatio, {
+    return new WebGLRenderTarget(width, height, {
       depthBuffer: false,
       stencilBuffer: false,
     });
@@ -66,9 +66,9 @@ export class Application {
   resizeRenderTarget() {
     const { width, height } = this.dimensions;
     const { pixelRatio } = this;
-    this.renderTarget.setSize(width * pixelRatio, height * pixelRatio);
+    this.renderTarget.setSize(width, height);
     this.setUniforms({
-      resolution: new Vector2(width * pixelRatio, height * pixelRatio),
+      resolution: new Vector2(width, height),
       buffer: this.renderTarget.texture,
     });
   }
@@ -92,8 +92,8 @@ export class Application {
         buffer: { value: this.renderTarget?.texture },
         resolution: {
           value: new Vector2(
-            this.dimensions.width * this.pixelRatio,
-            this.dimensions.height * this.pixelRatio
+            this.dimensions.width,
+            this.dimensions.height
           ),
         },
       },
@@ -130,7 +130,7 @@ export class Application {
     const { width, height } = this.dimensions;
     const uniforms = {
       time: clock.getElapsedTime(),
-      resolution: new Vector2(width * pixelRatio, height * pixelRatio),
+      resolution: new Vector2(width, height),
     };
     if (!this.currentPixelRatio !== pixelRatio) {
       this.currentPixelRatio = pixelRatio;
