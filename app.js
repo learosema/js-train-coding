@@ -143,9 +143,9 @@ export class Application {
 
     renderer.setRenderTarget(renderTarget);
     renderTarget.texture.encoding = renderer.outputEncoding;
-    renderTarget.texture.visible = false;
+    renderTarget.visible = false;
     renderer.render(scene, camera);
-    renderTarget.textzre.visible = true;
+    renderTarget.visible = true;
     
     requestAnimationFrame(this.run);
   };
