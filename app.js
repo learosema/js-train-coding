@@ -142,15 +142,10 @@ export class Application {
       throw Error('muhh wtf');
     }
 
-    // renderer.setRenderTarget(null);
-    // renderer.render(scene, camera);
-    // now it should not even render anything but it does, wtf?
+    renderer.render(scene, camera);
     const oldRenderTarget = renderer.getRenderTarget();
     renderer.setRenderTarget(renderTarget);
-    renderTarget.texture.encoding = renderer.outputEncoding;
-    renderTarget.visible = false;
-    renderer.render(scene, camera);
-    // renderTarget.visible = true;
+    renderer.render(scene, camera, renderTarget);
     renderer.setRenderTarget(oldRenderTarget);
     
     requestAnimationFrame(this.run);
