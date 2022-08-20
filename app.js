@@ -139,9 +139,9 @@ export class Application {
     }
     this.setUniforms(uniforms);
 
-    //renderer.setRenderTarget(null);
-    renderer.render(scene, camera);
-
+    // renderer.setRenderTarget(null);
+    // renderer.render(scene, camera);
+    // now it should not even render anything but it does, wtf?
     const oldRenderTarget = renderer.getRenderTarget();
     renderer.setRenderTarget(renderTarget);
     renderTarget.texture.encoding = renderer.outputEncoding;
