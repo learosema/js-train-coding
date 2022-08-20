@@ -139,11 +139,9 @@ export class Application {
     this.setUniforms(uniforms);
 
     renderer.setRenderTarget(null);
-    renderer.clear();
     renderer.render(scene, camera);
 
     renderer.setRenderTarget(renderTarget);
-    renderer.clear();
     renderer.render(scene, camera, renderTarget, false);
 
     requestAnimationFrame(this.run);
