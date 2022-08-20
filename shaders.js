@@ -12,6 +12,9 @@ void main() {
 export const fragmentShader = glsl`
 varying vec2 vUv;
 uniform float time;
+uniform sampler2D buffer;
+uniform vec2 resolution;
+
 void main() {
   gl_FragColor = vec4(
     .5 + .5 * sin(time+vUv.x * 2.),

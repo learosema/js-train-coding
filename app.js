@@ -8,13 +8,14 @@ const {
   ShaderMaterial,
   WebGLRenderTarget,
   PerspectiveCamera,
+  Vector2,
   WebGLRenderer,
 } = THREE;
 
 const $ = document.querySelector.bind(document);
 
 export class Application {
-  currentPixelRatio = 1;
+  currentPixelRatio = -1;
 
   get pixelRatio() {
     return Math.min(2, window.devicePixelRatio);
@@ -32,6 +33,11 @@ export class Application {
   constructor() {
     this.canvas = $(".world");
     this.renderer = new WebGLRenderer({ canvas: this.canvas });
+
+    this.renderer.setPixelRatio(this.pixelRatio);
+    this.currentPixelRatio = this.pixelRatio;
+    this.renderTarget = this.setupRenderTarget();
+
     this.clock = new Clock();
     this.camera = this.setupCamera();
     this.scene = this.setupScene();
@@ -45,6 +51,21 @@ export class Application {
     const aspect = width / height;
     const camera = new PerspectiveCamera(fieldOfView, aspect, 1, 100);
     return camera;
+  }
+
+  setupRenderTarget() {
+    const { width, height } = this.dimensions;
+    const { pixelRatio } = this;
+    return new WebGLRenderTarget(width * pixelRatio, height * pixelRatio);
+  }
+
+  resizeRenderTarget() {
+    const { width, height } = this.dimensions;
+    const { pixelRatio } = this;
+    this.renderTarget.setSize(width * pixelRatio, height * pixelRatio);
+    this.setUniforms({
+      resolution: new Vector2(width * pixelRatio, height * pixelRatio),
+    });
   }
 
   updateCamera() {
@@ -63,6 +84,13 @@ export class Application {
       side: THREE.DoubleSide,
       uniforms: {
         time: { value: 0 },
+        buffer: { value: this.renderTarget?.texture },
+        resolution: {
+          value: new Vector2(
+            this.dimensions.width * this.pixelRatio,
+            this.dimensions.height * this.pixelRatio
+          ),
+        },
       },
     });
     const mesh = new Mesh(geometry, material);
@@ -74,24 +102,47 @@ export class Application {
   onResize = () => {
     const { renderer, dimensions } = this;
     renderer.setSize(dimensions.width, dimensions.height);
+    this.resizeRenderTarget();
     this.camera.updateProjectionMatrix();
   };
 
-  run = () => {
-    const { renderer, pixelRatio, scene, camera, clock } = this;
-    if (!this.currentPixelRatio !== pixelRatio) {
-      this.currentPixelRatio = pixelRatio;
-      renderer.setPixelRatio(pixelRatio);
-    }
-    for (const mesh of scene.children) {
+  setUniforms(props) {
+    for (const mesh of this.scene.children) {
       if (mesh.type !== "Mesh" || mesh.material.type !== "ShaderMaterial") {
         continue;
       }
-      mesh.material.uniforms.time.value = clock.getElapsedTime();
+      for (const [key, val] of Object.entries(props)) {
+        if (!mesh.material.uniforms[key]) {
+          continue;
+        }
+        mesh.material.uniforms[key].value = val;
+      }
     }
+  }
+
+  run = () => {
+    const { renderer, pixelRatio, scene, camera, clock, renderTarget } = this;
+    const { width, height } = this.dimensions;
+    const uniforms = {
+      time: clock.getElapsedTime(),
+      resolution: new Vector2(width * pixelRatio, height * pixelRatio),
+    };
+    if (!this.currentPixelRatio !== pixelRatio) {
+      this.currentPixelRatio = pixelRatio;
+      renderer.setPixelRatio(pixelRatio);
+      this.resizeRenderTarget();
+    }
+    this.setUniforms(uniforms);
+    renderer.setRenderTarget(null);
+    renderer.render(scene, camera);
+    renderer.setRenderTarget(renderTarget);
     renderer.render(scene, camera);
     requestAnimationFrame(this.run);
   };
+
+  dispose() {
+    // TODO: clean things up.
+  }
 }
 
 const app = new Application();
