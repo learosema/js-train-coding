@@ -57,7 +57,10 @@ export class Application {
   setupRenderTarget() {
     const { width, height } = this.dimensions;
     const { pixelRatio } = this;
-    return new WebGLRenderTarget(width * pixelRatio, height * pixelRatio);
+    return new WebGLRenderTarget(width * pixelRatio, height * pixelRatio, {
+      depthBuffer: false,
+      stencilBuffer: false,
+    });
   }
 
   resizeRenderTarget() {
