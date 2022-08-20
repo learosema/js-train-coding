@@ -132,7 +132,7 @@ export class Application {
       time: clock.getElapsedTime(),
       resolution: new Vector2(width, height),
     };
-    if (!this.currentPixelRatio !== pixelRatio) {
+    if (this.currentPixelRatio !== pixelRatio) {
       this.currentPixelRatio = pixelRatio;
       renderer.setPixelRatio(pixelRatio);
       this.resizeRenderTarget();
