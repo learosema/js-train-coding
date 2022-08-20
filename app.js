@@ -150,7 +150,7 @@ export class Application {
     renderTarget.texture.encoding = renderer.outputEncoding;
     renderTarget.visible = false;
     renderer.render(scene, camera);
-    renderTarget.visible = true;
+    // renderTarget.visible = true;
     renderer.setRenderTarget(oldRenderTarget);
     
     requestAnimationFrame(this.run);
