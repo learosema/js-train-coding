@@ -36,8 +36,9 @@ void main() {
 
   vec2 p = p0 + vec2(cos(time), sin(time)) * .1;
   float a = atan(p.y, p.x);
-  float l = .2;
-  color = color * smoothstep(-0.05, 0.05, -sdCircle(p, .5 + l*sin(time * 3. + a * 5.)));
+  float d = sdCircle(p, .5 + .2*sin(time * 3. + a * 5.));
+  d=max(-d, sdCircle(p, .5 + .1*sin(time * 3. + a * 5.));
+  color = color * smoothstep(0., 0.02, d);
 
   vec3 texColor = texture2D(buffer, vUv).rgb;
 
