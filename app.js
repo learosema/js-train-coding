@@ -42,6 +42,7 @@ export class Application {
     this.camera = this.setupCamera();
     this.scene = this.setupScene();
 
+    this.onResize();
     window.addEventListener("resize", this.onResize, false);
   }
 
@@ -133,10 +134,13 @@ export class Application {
       this.resizeRenderTarget();
     }
     this.setUniforms(uniforms);
+
     renderer.setRenderTarget(null);
     renderer.render(scene, camera);
+
     renderer.setRenderTarget(renderTarget);
     renderer.render(scene, camera);
+
     requestAnimationFrame(this.run);
   };
 
