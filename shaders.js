@@ -42,6 +42,6 @@ void main() {
 
   vec3 texColor = texture2D(buffer, vUv).rgb;
 
-  gl_FragColor = vec4(color + texColor, 1.);
+  gl_FragColor = vec4(color + texColor * .9, 1.);
 }
 `;

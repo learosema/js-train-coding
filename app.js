@@ -144,7 +144,7 @@ export class Application {
 
     renderer.setRenderTarget(renderTarget);
     renderer.clear();
-    renderer.render(scene, camera);
+    renderer.render(scene, camera, renderTarget, false);
 
     requestAnimationFrame(this.run);
   };
