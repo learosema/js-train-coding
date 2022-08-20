@@ -138,6 +138,9 @@ export class Application {
       this.resizeRenderTarget();
     }
     this.setUniforms(uniforms);
+    if (! renderTarget) {
+      throw Error('muhh wtf');
+    }
 
     // renderer.setRenderTarget(null);
     // renderer.render(scene, camera);
