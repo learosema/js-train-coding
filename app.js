@@ -142,8 +142,11 @@ export class Application {
     renderer.render(scene, camera);
 
     renderer.setRenderTarget(renderTarget);
-    renderer.render(scene, camera, renderTarget, false);
-
+    renderTarget.texture.encoding = renderer.outputEncoding;
+    renderTarget.texture.visible = false;
+    renderer.render(scene, camera);
+    renderTarget.textzre.visible = true;
+    
     requestAnimationFrame(this.run);
   };
 
