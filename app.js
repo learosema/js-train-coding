@@ -138,14 +138,16 @@ export class Application {
     }
     this.setUniforms(uniforms);
 
-    renderer.setRenderTarget(null);
+    //renderer.setRenderTarget(null);
     renderer.render(scene, camera);
 
+    const oldRenderTarget = renderer.getRenderTarget();
     renderer.setRenderTarget(renderTarget);
     renderTarget.texture.encoding = renderer.outputEncoding;
     renderTarget.visible = false;
     renderer.render(scene, camera);
     renderTarget.visible = true;
+    renderer.setRenderTarget(oldRenderTarget);
     
     requestAnimationFrame(this.run);
   };
