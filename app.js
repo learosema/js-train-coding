@@ -51,16 +51,14 @@ export class Application {
     const fieldOfView = 60;
     const aspect = width / height;
     const camera = new PerspectiveCamera(fieldOfView, aspect, 1, 100);
+    camera.position.z = 5;
     return camera;
   }
 
   setupRenderTarget() {
     const { width, height } = this.dimensions;
     const { pixelRatio } = this;
-    return new WebGLRenderTarget(width, height, {
-      depthBuffer: false,
-      stencilBuffer: false,
-    });
+    return new WebGLRenderTarget(width, height);
   }
 
   resizeRenderTarget() {
@@ -138,14 +136,12 @@ export class Application {
       this.resizeRenderTarget();
     }
     this.setUniforms(uniforms);
-    if (! renderTarget) {
-      throw Error('muhh wtf');
-    }
-
+    
     renderer.render(scene, camera);
+    
     const oldRenderTarget = renderer.getRenderTarget();
     renderer.setRenderTarget(renderTarget);
-    renderer.render(scene, camera, renderTarget);
+    renderer.render(scene, camera);
     renderer.setRenderTarget(oldRenderTarget);
     
     requestAnimationFrame(this.run);
@@ -153,6 +149,7 @@ export class Application {
 
   dispose() {
     // TODO: clean things up.
+    // but for now doesn't matter as we never call it ;)
   }
 }
 
