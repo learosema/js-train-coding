@@ -140,7 +140,7 @@ export class Application {
     this.setUniforms(uniforms);
     
     // When the below render command is commented out, the screen should be blank.
-    // renderer.render(scene, camera);
+    renderer.render(scene, camera);
     
     const oldRenderTarget = renderer.getRenderTarget();
     renderer.setRenderTarget(renderTarget);
