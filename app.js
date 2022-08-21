@@ -129,22 +129,19 @@ export class Application {
   run = () => {
     const { renderer, pixelRatio, scene, camera, clock, renderTarget } = this;
     const { width, height } = this.dimensions;
-    const uniforms = {
-      time: clock.getElapsedTime(),
-    };
+    
     if (this.currentPixelRatio !== pixelRatio) {
       this.currentPixelRatio = pixelRatio;
       renderer.setPixelRatio(pixelRatio);
       this.resizeRenderTarget();
     }
-    this.setUniforms(uniforms);
-    
-    // When the below render command is commented out, the screen should be blank.
-    // renderer.render(scene, camera);
     
     renderer.setRenderTarget(renderTarget);
     renderer.render(scene, camera);
     renderer.setRenderTarget(null);
+    
+    this.setUniforms({time: clock.getElapsedTime()});
+    renderer.render(scene, camera);
     
     requestAnimationFrame(this.run);
   };
